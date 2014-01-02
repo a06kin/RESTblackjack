@@ -1,18 +1,22 @@
 package me.aaa;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("answer")
 public class AnswerResource {
 
     @GET
-    @Produces("application/json")
-    public MyJaxbBean getIt() {
-        return new MyJaxbBean("answer", "H");
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonArray getIt() {
+        return Json.createArrayBuilder()
+                .add(Json.createObjectBuilder()
+                        .add("type", "answer")
+                        .add("value", "H"))
+                .build();
     }
 
     @POST

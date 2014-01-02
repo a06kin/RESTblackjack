@@ -5,6 +5,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -34,7 +36,8 @@ public class AnswerResourceTest {
 
     @After
     public void tearDown() throws Exception {
-        server.stop();
+        //server.stop();
+        server.shutdown();
     }
 
     /**
@@ -42,7 +45,8 @@ public class AnswerResourceTest {
      */
     @Test
     public void testGetIt() {
-        MyJaxbBean responseMsg = target.path("answer").request().get(MyJaxbBean.class);
-        assertEquals("H", responseMsg.value);
+        JsonObject responseMsg = target.path("answer").request().get(JsonArray.class).getJsonObject(0);
+        System.out.println(responseMsg);
+        assertEquals("H", responseMsg.getString("value"));
     }
 }
