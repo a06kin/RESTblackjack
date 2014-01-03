@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+	</head>
+	<body>
+		<answer>Empty</answer>
+	</body>
+	<script type="text/javascript">
+		var event = {
+		  type: "data",
+		  data: "test"
+		};
+		var url = "http://localhost:7777/answer";
+
+		$.ajax({
+		    type: "GET",
+		    url: url,
+		    data: event,
+		    dataType: "json",
+		    contentType: "application/json",
+		    success: function(data) {
+		        $( "answer" ).html("Type:" + data[0]["type"] + " Value:" + data[0]["value"]);
+		        console.log(data[0]);
+		    }
+		});
+	</script>
+</html>

@@ -9,19 +9,14 @@ import javax.ws.rs.core.MediaType;
 public class AnswerResource {
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public JsonArray getIt() {
+    @Produces(MediaType.APPLICATION_JSON) //return
+    public JsonArray getIt(@QueryParam("type") String type, @QueryParam("value") String value) {
+        System.out.println("Type:" + type);
+        System.out.println("Value:" + value);
         return Json.createArrayBuilder()
                 .add(Json.createObjectBuilder()
                         .add("type", "answer")
                         .add("value", "H"))
                 .build();
-    }
-
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public void setIt(String data) {
-        System.out.println(data);
     }
 }
