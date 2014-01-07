@@ -5,18 +5,36 @@ import javax.json.JsonArray;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("answer")
+@Path("action")
 public class AnswerResource {
 
+    @Path("getTurn")
     @GET
-    @Produces(MediaType.APPLICATION_JSON) //return
-    public JsonArray getIt(@QueryParam("type") String type, @QueryParam("value") String value) {
-        System.out.println("Type:" + type);
-        System.out.println("Value:" + value);
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonArray getAnswer(@QueryParam("hand") Integer hand, @QueryParam("player") String player, @QueryParam("dealer") String dealer) {
+        System.out.println("Hand:" + hand);
+        System.out.println("Player:" + player);
+        System.out.println("Dealer:" + dealer);
+
+
         return Json.createArrayBuilder()
                 .add(Json.createObjectBuilder()
-                        .add("type", "answer")
-                        .add("value", "H"))
+                        .add("turn", Answer.getTurn(player, dealer)))
                 .build();
     }
+
+    @Path("getID")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonArray getID(){
+        Round test = new Round();
+        System.out.print("ID" + test.getID());
+        return Json.createArrayBuilder()
+                .add(Json.createObjectBuilder()
+                        .add("type", "id")
+                        .add("id", test.getID()))
+                .build();
+
+    }
+
 }
