@@ -11,15 +11,22 @@ public class AnswerResource {
     @Path("getTurn")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonArray getAnswer(@QueryParam("hand") Integer hand, @QueryParam("player") String player, @QueryParam("dealer") String dealer) {
-        System.out.println("Hand:" + hand);
-        System.out.println("Player:" + player);
-        System.out.println("Dealer:" + dealer);
+    public JsonArray getAnswer(@QueryParam("ID") String ID, @QueryParam("hand") Integer turn, @QueryParam("player") String playerHand, @QueryParam("dealer") String dealerUpcard) {
+        System.out.println("ID:" + ID);
+        System.out.println("Turn:" + turn);
+        System.out.println("Player:" + playerHand);
+        System.out.println("Dealer:" + dealerUpcard);
 
+        Round now = Main.session.get(ID);
+        String answer = Answer.getTurn(playerHand, dealerUpcard);
+
+        now.addDealerH(turn, dealerUpcard);
+        now.addPlayerH(turn, playerHand);
+        now.addTurn(turn, answer);
 
         return Json.createArrayBuilder()
                 .add(Json.createObjectBuilder()
-                        .add("turn", Answer.getTurn(player, dealer)))
+                        .add("turn", answer))
                 .build();
     }
 
@@ -27,14 +34,25 @@ public class AnswerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getID(){
-        Round test = new Round();
-        System.out.print("ID" + test.getID());
+        Round now = new Round();
+        Main.session.put(now.getID(),now);
+        System.out.print("ID" + now.getID());
         return Json.createArrayBuilder()
                 .add(Json.createObjectBuilder()
-                        .add("type", "id")
-                        .add("id", test.getID()))
+                        .add("id", now.getID()))
                 .build();
 
+    }
+
+    @Path("end")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public void endSession(@QueryParam("ID") String ID, @QueryParam("result") String result){
+        Round now = Main.session.get(ID);
+        now.setResult(result);
+        Main.ds.save(now);
+        Main.session.remove(ID);
+        System.out.print("END " + ID);
     }
 
 }

@@ -39,7 +39,7 @@ public class AnswerResourceTest {
      */
     @Test
     public void testGetIt() {
-        JsonObject responseMsg = target.path("answer").request().get(JsonArray.class).getJsonObject(0);
+        JsonObject responseMsg = target.path("action/getAnswer").request().get(JsonArray.class).getJsonObject(0);
         System.out.println(responseMsg);
         assertEquals("H", responseMsg.getString("value"));
     }

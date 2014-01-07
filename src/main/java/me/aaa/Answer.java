@@ -151,7 +151,7 @@ public class Answer {
 
     }};
 
-    public static String getTurn(String player, String dealerC){
-        return data.get(new Pair<>(player, dealerC));
+    public static String getTurn(String player, String dealerUpcard){
+        return data.get(new Pair<>(player, dealerUpcard));
     }
 }

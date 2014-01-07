@@ -9,6 +9,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mongodb.*;
 
@@ -17,6 +19,8 @@ public class Main {
     public static final String BASE_URI = "http://localhost:7777/";
 
     public static Datastore ds;
+
+    public static Map<String,Round> session = new HashMap<>();
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -41,7 +45,7 @@ public class Main {
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
 //        server.stop();
-        server.shutdown();
+        server.shutdown(); //TODO: check if all session is end (if no - maybe save in base)
     }
 
     private static void configDB(){
