@@ -1,4 +1,4 @@
-package me.aaa;
+package me.aaa.server;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;

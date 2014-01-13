@@ -1,4 +1,4 @@
-package me.aaa;
+package me.aaa.server;
 
 import org.glassfish.grizzly.utils.Pair;
 

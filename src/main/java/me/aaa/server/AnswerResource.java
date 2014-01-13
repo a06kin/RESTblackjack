@@ -1,4 +1,4 @@
-package me.aaa;
+package me.aaa.server;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -12,6 +12,9 @@ public class AnswerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getAnswer(@QueryParam("ID") String ID, @QueryParam("hand") Integer turn, @QueryParam("player") String playerHand, @QueryParam("dealer") String dealerUpcard) {
+        //TODO: turn? whaaat?!
+        //maybe № (number)
+
         System.out.println("ID:" + ID);
         System.out.println("Turn:" + turn);
         System.out.println("Player:" + playerHand);
