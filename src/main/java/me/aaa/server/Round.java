@@ -19,11 +19,9 @@ public class Round {
 
     Round(){
         Main.ds.save(this);
-        System.out.print("ID" + id.toString());
         playerH = new HashMap<>();
         dealerH = new HashMap<>();
         turns = new HashMap<>();
-
     }
 
     public String getID(){

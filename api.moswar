@@ -3,5 +3,8 @@ http://www.moswar.ru/casino/blackjack/
 POST:
 
 action=new&bet=10
+action=new&bet=20
+action=new&bet=30
 action=double
 action=more
+action=stop

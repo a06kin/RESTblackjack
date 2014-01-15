@@ -1,13 +1,11 @@
 package me.aaa.server;
 
-import org.glassfish.grizzly.utils.Pair;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Answer {
 
-    private static Map<Pair<String,String>, String> data = new HashMap<Pair<String,String> , String>() {{
+    private static Map<String, String> data = new HashMap<String, String>() {{
         //6 decks, S17, D10, No DAS, No Surrender, Peek
 
         //{My,D}, {A}
@@ -17,141 +15,145 @@ public class Answer {
             P   = Split
             D   = Double (Hit if not allowed)
         */
-        put(new Pair<>("5","2" ), "H");       put(new Pair<>("6","2" ), "H");       put(new Pair<>("7","2" ), "H");
-        put(new Pair<>("5","3" ), "H");       put(new Pair<>("6","3" ), "H");       put(new Pair<>("7","3" ), "H");
-        put(new Pair<>("5","4" ), "H");       put(new Pair<>("6","4" ), "H");       put(new Pair<>("7","4" ), "H");
-        put(new Pair<>("5","5" ), "H");       put(new Pair<>("6","5" ), "H");       put(new Pair<>("7","5" ), "H");
-        put(new Pair<>("5","6" ), "H");       put(new Pair<>("6","6" ), "H");       put(new Pair<>("7","6" ), "H");
-        put(new Pair<>("5","7" ), "H");       put(new Pair<>("6","7" ), "H");       put(new Pair<>("7","7" ), "H");
-        put(new Pair<>("5","8" ), "H");       put(new Pair<>("6","8" ), "H");       put(new Pair<>("7","8" ), "H");
-        put(new Pair<>("5","9" ), "H");       put(new Pair<>("6","9" ), "H");       put(new Pair<>("7","9" ), "H");
-        put(new Pair<>("5","10"), "H");       put(new Pair<>("6","10"), "H");       put(new Pair<>("7","10"), "H");
-        put(new Pair<>("5","A" ), "H");       put(new Pair<>("6","A" ), "H");       put(new Pair<>("7","A" ), "H");
 
-        put(new Pair<>("8","2" ), "H");       put(new Pair<>("9","2" ), "H");       put(new Pair<>("10","2" ), "D");
-        put(new Pair<>("8","3" ), "H");       put(new Pair<>("9","3" ), "H");       put(new Pair<>("10","3" ), "D");
-        put(new Pair<>("8","4" ), "H");       put(new Pair<>("9","4" ), "H");       put(new Pair<>("10","4" ), "D");
-        put(new Pair<>("8","5" ), "H");       put(new Pair<>("9","5" ), "H");       put(new Pair<>("10","5" ), "D");
-        put(new Pair<>("8","6" ), "H");       put(new Pair<>("9","6" ), "H");       put(new Pair<>("10","6" ), "D");
-        put(new Pair<>("8","7" ), "H");       put(new Pair<>("9","7" ), "H");       put(new Pair<>("10","7" ), "D");
-        put(new Pair<>("8","8" ), "H");       put(new Pair<>("9","8" ), "H");       put(new Pair<>("10","8" ), "D");
-        put(new Pair<>("8","9" ), "H");       put(new Pair<>("9","9" ), "H");       put(new Pair<>("10","9" ), "D");
-        put(new Pair<>("8","10"), "H");       put(new Pair<>("9","10"), "H");       put(new Pair<>("10","10"), "H");
-        put(new Pair<>("8","A" ), "H");       put(new Pair<>("9","A" ), "H");       put(new Pair<>("10","A" ), "H");
 
-        put(new Pair<>("11","2" ), "D");      put(new Pair<>("12","2" ), "H");      put(new Pair<>("13","2" ), "S");
-        put(new Pair<>("11","3" ), "D");      put(new Pair<>("12","3" ), "H");      put(new Pair<>("13","3" ), "S");
-        put(new Pair<>("11","4" ), "D");      put(new Pair<>("12","4" ), "S");      put(new Pair<>("13","4" ), "S");
-        put(new Pair<>("11","5" ), "D");      put(new Pair<>("12","5" ), "S");      put(new Pair<>("13","5" ), "S");
-        put(new Pair<>("11","6" ), "D");      put(new Pair<>("12","6" ), "S");      put(new Pair<>("13","6" ), "S");
-        put(new Pair<>("11","7" ), "D");      put(new Pair<>("12","7" ), "H");      put(new Pair<>("13","7" ), "H");
-        put(new Pair<>("11","8" ), "D");      put(new Pair<>("12","8" ), "H");      put(new Pair<>("13","8" ), "H");
-        put(new Pair<>("11","9" ), "D");      put(new Pair<>("12","9" ), "H");      put(new Pair<>("13","9" ), "H");
-        put(new Pair<>("11","10"), "D");      put(new Pair<>("12","10"), "H");      put(new Pair<>("13","10"), "H");
-        put(new Pair<>("11","A" ), "H");      put(new Pair<>("12","A" ), "H");      put(new Pair<>("13","A" ), "H");
+        System.out.print("Answer map init");
 
-        put(new Pair<>("14","2" ), "S");      put(new Pair<>("15","2" ), "S");      put(new Pair<>("16","2" ), "S");
-        put(new Pair<>("14","3" ), "S");      put(new Pair<>("15","3" ), "S");      put(new Pair<>("16","3" ), "S");
-        put(new Pair<>("14","4" ), "S");      put(new Pair<>("15","4" ), "S");      put(new Pair<>("16","4" ), "S");
-        put(new Pair<>("14","5" ), "S");      put(new Pair<>("15","5" ), "S");      put(new Pair<>("16","5" ), "S");
-        put(new Pair<>("14","6" ), "S");      put(new Pair<>("15","6" ), "S");      put(new Pair<>("16","6" ), "S");
-        put(new Pair<>("14","7" ), "H");      put(new Pair<>("15","7" ), "H");      put(new Pair<>("16","7" ), "H");
-        put(new Pair<>("14","8" ), "H");      put(new Pair<>("15","8" ), "H");      put(new Pair<>("16","8" ), "H");
-        put(new Pair<>("14","9" ), "H");      put(new Pair<>("15","9" ), "H");      put(new Pair<>("16","9" ), "H");
-        put(new Pair<>("14","10"), "H");      put(new Pair<>("15","10"), "H");      put(new Pair<>("16","10"), "H");
-        put(new Pair<>("14","A" ), "H");      put(new Pair<>("15","A" ), "H");      put(new Pair<>("16","A" ), "H");
+        put("52" , "H");       put("62" , "H");       put("72" , "H");
+        put("53" , "H");       put("63" , "H");       put("73" , "H");
+        put("54" , "H");       put("64" , "H");       put("74" , "H");
+        put("55" , "H");       put("65" , "H");       put("75" , "H");
+        put("56" , "H");       put("66" , "H");       put("76" , "H");
+        put("57" , "H");       put("67" , "H");       put("77" , "H");
+        put("58" , "H");       put("68" , "H");       put("78" , "H");
+        put("59" , "H");       put("69" , "H");       put("79" , "H");
+        put("510", "H");       put("610", "H");       put("710", "H");
+        put("5A" , "H");       put("6A" , "H");       put("7A" , "H");
 
-        put(new Pair<>("17","2" ), "S");  
-        put(new Pair<>("17","3" ), "S");  
-        put(new Pair<>("17","4" ), "S");  
-        put(new Pair<>("17","5" ), "S");  
-        put(new Pair<>("17","6" ), "S");  
-        put(new Pair<>("17","7" ), "S");  
-        put(new Pair<>("17","8" ), "S");  
-        put(new Pair<>("17","9" ), "S");  
-        put(new Pair<>("17","10"), "S"); 
-        put(new Pair<>("17","A" ), "S");
+        put("82" , "H");       put("92" , "H");       put("102" , "D");
+        put("83" , "H");       put("93" , "H");       put("103" , "D");
+        put("84" , "H");       put("94" , "H");       put("104" , "D");
+        put("85" , "H");       put("95" , "H");       put("105" , "D");
+        put("86" , "H");       put("96" , "H");       put("106" , "D");
+        put("87" , "H");       put("97" , "H");       put("107" , "D");
+        put("88" , "H");       put("98" , "H");       put("108" , "D");
+        put("89" , "H");       put("99" , "H");       put("109" , "D");
+        put("810", "H");       put("910", "H");       put("1010", "H");
+        put("8A" , "H");       put("9A" , "H");       put("10A" , "H");
 
-        put(new Pair<>("A2","2" ), "H");      put(new Pair<>("A3","2" ), "H");      put(new Pair<>("A4","2" ), "H");
-        put(new Pair<>("A2","3" ), "H");      put(new Pair<>("A3","3" ), "H");      put(new Pair<>("A4","3" ), "H");
-        put(new Pair<>("A2","4" ), "H");      put(new Pair<>("A3","4" ), "H");      put(new Pair<>("A4","4" ), "H");
-        put(new Pair<>("A2","5" ), "H");      put(new Pair<>("A3","5" ), "H");      put(new Pair<>("A4","5" ), "H");
-        put(new Pair<>("A2","6" ), "H");      put(new Pair<>("A3","6" ), "H");      put(new Pair<>("A4","6" ), "H");
-        put(new Pair<>("A2","7" ), "H");      put(new Pair<>("A3","7" ), "H");      put(new Pair<>("A4","7" ), "H");
-        put(new Pair<>("A2","8" ), "H");      put(new Pair<>("A3","8" ), "H");      put(new Pair<>("A4","8" ), "H");
-        put(new Pair<>("A2","9" ), "H");      put(new Pair<>("A3","9" ), "H");      put(new Pair<>("A4","9" ), "H");
-        put(new Pair<>("A2","10"), "H");      put(new Pair<>("A3","10"), "H");      put(new Pair<>("A4","10"), "H");
-        put(new Pair<>("A2","A" ), "H");      put(new Pair<>("A3","A" ), "H");      put(new Pair<>("A4","A" ), "H");
+        put("112" , "D");      put("122" , "H");      put("132" , "S");
+        put("113" , "D");      put("123" , "H");      put("133" , "S");
+        put("114" , "D");      put("124" , "S");      put("134" , "S");
+        put("115" , "D");      put("125" , "S");      put("135" , "S");
+        put("116" , "D");      put("126" , "S");      put("136" , "S");
+        put("117" , "D");      put("127" , "H");      put("137" , "H");
+        put("118" , "D");      put("128" , "H");      put("138" , "H");
+        put("119" , "D");      put("129" , "H");      put("139" , "H");
+        put("1110", "D");      put("1210", "H");      put("1310", "H");
+        put("11A" , "H");      put("12A" , "H");      put("13A" , "H");
 
-        put(new Pair<>("A5","2" ), "H");      put(new Pair<>("A6","2" ), "H");      put(new Pair<>("A7","2" ), "S");
-        put(new Pair<>("A5","3" ), "H");      put(new Pair<>("A6","3" ), "H");      put(new Pair<>("A7","3" ), "S");
-        put(new Pair<>("A5","4" ), "H");      put(new Pair<>("A6","4" ), "H");      put(new Pair<>("A7","4" ), "S");
-        put(new Pair<>("A5","5" ), "H");      put(new Pair<>("A6","5" ), "H");      put(new Pair<>("A7","5" ), "S");
-        put(new Pair<>("A5","6" ), "H");      put(new Pair<>("A6","6" ), "H");      put(new Pair<>("A7","6" ), "S");
-        put(new Pair<>("A5","7" ), "H");      put(new Pair<>("A6","7" ), "H");      put(new Pair<>("A7","7" ), "S");
-        put(new Pair<>("A5","8" ), "H");      put(new Pair<>("A6","8" ), "H");      put(new Pair<>("A7","8" ), "S");
-        put(new Pair<>("A5","9" ), "H");      put(new Pair<>("A6","9" ), "H");      put(new Pair<>("A7","9" ), "H");
-        put(new Pair<>("A5","10"), "H");      put(new Pair<>("A6","10"), "H");      put(new Pair<>("A7","10"), "H");
-        put(new Pair<>("A5","A" ), "H");      put(new Pair<>("A6","A" ), "H");      put(new Pair<>("A7","A" ), "H");
+        put("142" , "S");      put("152" , "S");      put("162" , "S");
+        put("143" , "S");      put("153" , "S");      put("163" , "S");
+        put("144" , "S");      put("154" , "S");      put("164" , "S");
+        put("145" , "S");      put("155" , "S");      put("165" , "S");
+        put("146" , "S");      put("156" , "S");      put("166" , "S");
+        put("147" , "H");      put("157" , "H");      put("167" , "H");
+        put("148" , "H");      put("158" , "H");      put("168" , "H");
+        put("149" , "H");      put("159" , "H");      put("169" , "H");
+        put("1410", "H");      put("1510", "H");      put("1610", "H");
+        put("14A" , "H");      put("15A" , "H");      put("16A" , "H");
 
-        put(new Pair<>("A8","2" ), "S");      put(new Pair<>("A9","2" ), "S");  
-        put(new Pair<>("A8","3" ), "S");      put(new Pair<>("A9","3" ), "S");  
-        put(new Pair<>("A8","4" ), "S");      put(new Pair<>("A9","4" ), "S");  
-        put(new Pair<>("A8","5" ), "S");      put(new Pair<>("A9","5" ), "S");  
-        put(new Pair<>("A8","6" ), "S");      put(new Pair<>("A9","6" ), "S");  
-        put(new Pair<>("A8","7" ), "S");      put(new Pair<>("A9","7" ), "S");  
-        put(new Pair<>("A8","8" ), "S");      put(new Pair<>("A9","8" ), "S");  
-        put(new Pair<>("A8","9" ), "S");      put(new Pair<>("A9","9" ), "S");  
-        put(new Pair<>("A8","10"), "S");      put(new Pair<>("A9","10"), "S"); 
-        put(new Pair<>("A8","A" ), "S");      put(new Pair<>("A9","A" ), "S"); 
+        put("172" , "S");  
+        put("173" , "S");  
+        put("174" , "S");  
+        put("175" , "S");  
+        put("176" , "S");  
+        put("177" , "S");  
+        put("178" , "S");  
+        put("179" , "S");  
+        put("1710", "S"); 
+        put("17A" , "S");
 
-        put(new Pair<>("22","2" ), "H");      put(new Pair<>("33","2" ), "H");      put(new Pair<>("44","2" ), "H");
-        put(new Pair<>("22","3" ), "H");      put(new Pair<>("33","3" ), "H");      put(new Pair<>("44","3" ), "H");
-        put(new Pair<>("22","4" ), "P");      put(new Pair<>("33","4" ), "P");      put(new Pair<>("44","4" ), "H");
-        put(new Pair<>("22","5" ), "P");      put(new Pair<>("33","5" ), "P");      put(new Pair<>("44","5" ), "H");
-        put(new Pair<>("22","6" ), "P");      put(new Pair<>("33","6" ), "P");      put(new Pair<>("44","6" ), "H");
-        put(new Pair<>("22","7" ), "P");      put(new Pair<>("33","7" ), "P");      put(new Pair<>("44","7" ), "H");
-        put(new Pair<>("22","8" ), "H");      put(new Pair<>("33","8" ), "H");      put(new Pair<>("44","8" ), "H");
-        put(new Pair<>("22","9" ), "H");      put(new Pair<>("33","9" ), "H");      put(new Pair<>("44","9" ), "H");
-        put(new Pair<>("22","10"), "H");      put(new Pair<>("33","10"), "H");      put(new Pair<>("44","10"), "H");
-        put(new Pair<>("22","A" ), "H");      put(new Pair<>("33","A" ), "H");      put(new Pair<>("44","A" ), "H");
+        put("A22" , "H");      put("A32" , "H");      put("A42" , "H");
+        put("A23" , "H");      put("A33" , "H");      put("A43" , "H");
+        put("A24" , "H");      put("A34" , "H");      put("A44" , "H");
+        put("A25" , "H");      put("A35" , "H");      put("A45" , "H");
+        put("A26" , "H");      put("A36" , "H");      put("A46" , "H");
+        put("A27" , "H");      put("A37" , "H");      put("A47" , "H");
+        put("A28" , "H");      put("A38" , "H");      put("A48" , "H");
+        put("A29" , "H");      put("A39" , "H");      put("A49" , "H");
+        put("A210", "H");      put("A310", "H");      put("A410", "H");
+        put("A2A" , "H");      put("A3A" , "H");      put("A4A" , "H");
 
-        put(new Pair<>("55","2" ), "D");      put(new Pair<>("66","2" ), "H");      put(new Pair<>("77","2" ), "P");
-        put(new Pair<>("55","3" ), "D");      put(new Pair<>("66","3" ), "P");      put(new Pair<>("77","3" ), "P");
-        put(new Pair<>("55","4" ), "D");      put(new Pair<>("66","4" ), "P");      put(new Pair<>("77","4" ), "P");
-        put(new Pair<>("55","5" ), "D");      put(new Pair<>("66","5" ), "P");      put(new Pair<>("77","5" ), "P");
-        put(new Pair<>("55","6" ), "D");      put(new Pair<>("66","6" ), "P");      put(new Pair<>("77","6" ), "P");
-        put(new Pair<>("55","7" ), "D");      put(new Pair<>("66","7" ), "H");      put(new Pair<>("77","7" ), "P");
-        put(new Pair<>("55","8" ), "D");      put(new Pair<>("66","8" ), "H");      put(new Pair<>("77","8" ), "H");
-        put(new Pair<>("55","9" ), "D");      put(new Pair<>("66","9" ), "H");      put(new Pair<>("77","9" ), "H");
-        put(new Pair<>("55","10"), "H");      put(new Pair<>("66","10"), "H");      put(new Pair<>("77","10"), "H");
-        put(new Pair<>("55","A" ), "H");      put(new Pair<>("66","A" ), "H");      put(new Pair<>("77","A" ), "H");
+        put("A52" , "H");      put("A62" , "H");      put("A72" , "S");
+        put("A53" , "H");      put("A63" , "H");      put("A73" , "S");
+        put("A54" , "H");      put("A64" , "H");      put("A74" , "S");
+        put("A55" , "H");      put("A65" , "H");      put("A75" , "S");
+        put("A56" , "H");      put("A66" , "H");      put("A76" , "S");
+        put("A57" , "H");      put("A67" , "H");      put("A77" , "S");
+        put("A58" , "H");      put("A68" , "H");      put("A78" , "S");
+        put("A59" , "H");      put("A69" , "H");      put("A79" , "H");
+        put("A510", "H");      put("A610", "H");      put("A710", "H");
+        put("A5A" , "H");      put("A6A" , "H");      put("A7A" , "H");
 
-        put(new Pair<>("88","2" ), "P");      put(new Pair<>("99","2" ), "P");
-        put(new Pair<>("88","3" ), "P");      put(new Pair<>("99","3" ), "P");  
-        put(new Pair<>("88","4" ), "P");      put(new Pair<>("99","4" ), "P");  
-        put(new Pair<>("88","5" ), "P");      put(new Pair<>("99","5" ), "P");  
-        put(new Pair<>("88","6" ), "P");      put(new Pair<>("99","6" ), "P");  
-        put(new Pair<>("88","7" ), "P");      put(new Pair<>("99","7" ), "S");  
-        put(new Pair<>("88","8" ), "P");      put(new Pair<>("99","8" ), "P");  
-        put(new Pair<>("88","9" ), "P");      put(new Pair<>("99","9" ), "P");  
-        put(new Pair<>("88","10"), "P");      put(new Pair<>("99","10"), "S");
-        put(new Pair<>("88","A" ), "P");      put(new Pair<>("99","A" ), "S");
+        put("A82" , "S");      put("A92" , "S");  
+        put("A83" , "S");      put("A93" , "S");  
+        put("A84" , "S");      put("A94" , "S");  
+        put("A85" , "S");      put("A95" , "S");  
+        put("A86" , "S");      put("A96" , "S");  
+        put("A87" , "S");      put("A97" , "S");  
+        put("A88" , "S");      put("A98" , "S");  
+        put("A89" , "S");      put("A99" , "S");  
+        put("A810", "S");      put("A910", "S"); 
+        put("A8A" , "S");      put("A9A" , "S"); 
 
-        put(new Pair<>("TT","2" ), "S");      put(new Pair<>("AA","2" ), "P");
-        put(new Pair<>("TT","3" ), "S");      put(new Pair<>("AA","3" ), "P");  
-        put(new Pair<>("TT","4" ), "S");      put(new Pair<>("AA","4" ), "P");  
-        put(new Pair<>("TT","5" ), "S");      put(new Pair<>("AA","5" ), "P");  
-        put(new Pair<>("TT","6" ), "S");      put(new Pair<>("AA","6" ), "P");  
-        put(new Pair<>("TT","7" ), "S");      put(new Pair<>("AA","7" ), "P");  
-        put(new Pair<>("TT","8" ), "S");      put(new Pair<>("AA","8" ), "P");  
-        put(new Pair<>("TT","9" ), "S");      put(new Pair<>("AA","9" ), "P");  
-        put(new Pair<>("TT","10"), "S");      put(new Pair<>("AA","10"), "P"); 
-        put(new Pair<>("TT","A" ), "S");      put(new Pair<>("AA","A" ), "P"); 
+        put("222" , "H");      put("332" , "H");      put("442" , "H");
+        put("223" , "H");      put("333" , "H");      put("443" , "H");
+        put("224" , "P");      put("334" , "P");      put("444" , "H");
+        put("225" , "P");      put("335" , "P");      put("445" , "H");
+        put("226" , "P");      put("336" , "P");      put("446" , "H");
+        put("227" , "P");      put("337" , "P");      put("447" , "H");
+        put("228" , "H");      put("338" , "H");      put("448" , "H");
+        put("229" , "H");      put("339" , "H");      put("449" , "H");
+        put("2210", "H");      put("3310", "H");      put("4410", "H");
+        put("22A" , "H");      put("33A" , "H");      put("44A" , "H");
+
+        put("552" , "D");      put("662" , "H");      put("772" , "P");
+        put("553" , "D");      put("663" , "P");      put("773" , "P");
+        put("554" , "D");      put("664" , "P");      put("774" , "P");
+        put("555" , "D");      put("665" , "P");      put("775" , "P");
+        put("556" , "D");      put("666" , "P");      put("776" , "P");
+        put("557" , "D");      put("667" , "H");      put("777" , "P");
+        put("558" , "D");      put("668" , "H");      put("778" , "H");
+        put("559" , "D");      put("669" , "H");      put("779" , "H");
+        put("5510", "H");      put("6610", "H");      put("7710", "H");
+        put("55A" , "H");      put("66A" , "H");      put("77A" , "H");
+
+        put("882" , "P");      put("992" , "P");
+        put("883" , "P");      put("993" , "P");  
+        put("884" , "P");      put("994" , "P");  
+        put("885" , "P");      put("995" , "P");  
+        put("886" , "P");      put("996" , "P");  
+        put("887" , "P");      put("997" , "S");  
+        put("888" , "P");      put("998" , "P");  
+        put("889" , "P");      put("999" , "P");  
+        put("8810", "P");      put("9910", "S");
+        put("88A" , "P");      put("99A" , "S");
+
+        put("TT2" , "S");      put("AA2" , "P");
+        put("TT3" , "S");      put("AA3" , "P");
+        put("TT4" , "S");      put("AA4" , "P");
+        put("TT5" , "S");      put("AA5" , "P");
+        put("TT6" , "S");      put("AA6" , "P");
+        put("TT7" , "S");      put("AA7" , "P");
+        put("TT8" , "S");      put("AA8" , "P");
+        put("TT9" , "S");      put("AA9" , "P");
+        put("TT10", "S");      put("AA10", "P");
+        put("TTA" , "S");      put("AAA" , "P");
 
     }};
 
     public static String getTurn(String player, String dealerUpcard){
-        return data.get(new Pair<>(player, dealerUpcard));
+        return data.get(player+dealerUpcard);
     }
 }

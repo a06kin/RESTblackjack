@@ -5,8 +5,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -14,19 +16,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by aaa on 1/13/14.
- */
 public class TEST {
 
+    private static CloseableHttpClient client = HttpClients.createDefault();
+
     public static void main(String[] args) throws IOException, InterruptedException {
-        HttpClient client = HttpClients.createDefault();
         HttpGet getIndex = new HttpGet("http://localhost:7777/action/getID");
 
-        HttpResponse indexResponse = client.execute(getIndex);
+        CloseableHttpResponse indexResponse = client.execute(getIndex);
 
-        System.out.println(indexResponse.getStatusLine());
-        System.out.println(indexResponse.toString());
+        try {
+            System.out.println("indexResponse");
+            System.out.println(indexResponse.getStatusLine());
+            System.out.println(indexResponse.toString());
+        } finally {
+            indexResponse.close();
+        }
 
         Thread.sleep(2000);
 
@@ -40,28 +45,42 @@ public class TEST {
         HttpPost postIndex = new HttpPost("http://localhost:7777/action/getTurn");
         postIndex.setEntity(entity);
 
-        HttpResponse postIndexResponse = client.execute(postIndex);
+        CloseableHttpResponse postIndexResponse = client.execute(postIndex);
 
-        System.out.println(postIndexResponse.getStatusLine());
-        System.out.println(postIndexResponse.toString());
+        try {
+            System.out.println("postIndexResponse");
+            System.out.println(postIndexResponse.getStatusLine());
+            System.out.println(postIndexResponse.toString());
+        } finally {
+            postIndexResponse.close();
+        }
 
         Thread.sleep(2000);
 
         HttpGet getPlayer = new HttpGet("http://localhost:7777/action/getID");
 
-        HttpResponse getPlayerResponse = client.execute(getPlayer);
-
-        System.out.println(getPlayerResponse.getStatusLine());
-        System.out.println(getPlayerResponse.toString());
+        CloseableHttpResponse getPlayerResponse = client.execute(getPlayer);
+        try{
+            System.out.println("getPlayerResponse");
+            System.out.println(getPlayerResponse.getStatusLine());
+            System.out.println(getPlayerResponse.toString());
+        } finally {
+            getPlayerResponse.close();
+        }
 
         Thread.sleep(2000);
 
         HttpGet getBlackJackIndex = new HttpGet("http://localhost:7777/action/getID");
 
-        HttpResponse BlackJackIndexResponse = client.execute(getBlackJackIndex);
+        CloseableHttpResponse BlackJackIndexResponse = client.execute(getBlackJackIndex);
 
-        System.out.println(BlackJackIndexResponse.getStatusLine());
-        System.out.println(BlackJackIndexResponse.toString());
+        try{
+            System.out.println("BlackJackIndexResponse");
+            System.out.println(BlackJackIndexResponse.getStatusLine());
+            System.out.println(BlackJackIndexResponse.toString());
+        } finally {
+            getPlayerResponse.close();
+        }
 
         client.getConnectionManager().shutdown();
     }

@@ -35,9 +35,6 @@ public class AnswerResourceTest {
         server.shutdown();
     }
 
-    /**
-     * Test to see that the message "Got it!" is sent in the response.
-     */
     @Test
     public void testGetIt() {
         JsonObject responseMsg = target.path("action/getAnswer").request().get(JsonArray.class).getJsonObject(0);

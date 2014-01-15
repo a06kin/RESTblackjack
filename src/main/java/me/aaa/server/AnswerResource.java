@@ -12,34 +12,50 @@ public class AnswerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getAnswer(@QueryParam("ID") String ID, @QueryParam("hand") Integer turn, @QueryParam("player") String playerHand, @QueryParam("dealer") String dealerUpcard) {
-        //TODO: turn? whaaat?!
-        //maybe № (number)
-
+        System.out.println("=====GETTURN=======");
         System.out.println("ID:" + ID);
         System.out.println("Turn:" + turn);
         System.out.println("Player:" + playerHand);
         System.out.println("Dealer:" + dealerUpcard);
 
         Round now = Main.session.get(ID);
-        String answer = Answer.getTurn(playerHand, dealerUpcard);
+        if (now != null){
+            String answer = Answer.getTurn(playerHand, dealerUpcard);
 
-        now.addDealerH(turn, dealerUpcard);
-        now.addPlayerH(turn, playerHand);
-        now.addTurn(turn, answer);
+            now.addDealerH(turn, dealerUpcard);
+            now.addPlayerH(turn, playerHand);
+            now.addTurn(turn, answer);
 
-        return Json.createArrayBuilder()
-                .add(Json.createObjectBuilder()
-                        .add("turn", answer))
-                .build();
+            if (answer != null){
+
+                System.out.println("answer = " + answer);
+
+                return Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("turn", answer))
+                        .build();
+            }else{
+                return Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("error", "noAnswerFound"))
+                        .build();
+            }
+        }else{
+            return Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                            .add("error", "noIDFound"))
+                    .build();
+        }
     }
 
     @Path("getID")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public JsonArray getID(){
+        System.out.println("=====GETID=======");
         Round now = new Round();
         Main.session.put(now.getID(),now);
-        System.out.print("ID" + now.getID());
+        System.out.println("ID: " + now.getID());
         return Json.createArrayBuilder()
                 .add(Json.createObjectBuilder()
                         .add("id", now.getID()))
@@ -48,14 +64,30 @@ public class AnswerResource {
     }
 
     @Path("end")
-    @POST
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public void endSession(@QueryParam("ID") String ID, @QueryParam("result") String result){
+    public JsonArray endSession(@QueryParam("ID") String ID, @QueryParam("result") String result){
+        System.out.println("=====END=======");
         Round now = Main.session.get(ID);
-        now.setResult(result);
-        Main.ds.save(now);
-        Main.session.remove(ID);
-        System.out.print("END " + ID);
+        if (now != null){
+            System.out.println("test");
+            now.setResult(result);
+            System.out.println("test2");
+            Main.ds.save(now);
+            System.out.println("test3");
+            Main.session.remove(ID);
+            System.out.println("test4");
+            System.out.print("END " + ID);
+            return Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                            .add("ok", "ok"))
+                    .build();
+        }else{
+            return Json.createArrayBuilder()
+                    .add(Json.createObjectBuilder()
+                            .add("error", "noIDFound"))
+                    .build();
+        }
     }
 
 }
