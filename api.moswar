@@ -5,6 +5,159 @@ POST:
 action=new&bet=10
 action=new&bet=20
 action=new&bet=30
+action=split
 action=double
 action=more
 action=stop
+
+ANSWER EXAMPLE:
+
+action=new&bet
+
+{
+    "status": "ok",
+    "state": 10,
+    "rightBet": 10,
+    "newRightHand": [
+        ["q", "s", 10],
+        [3, "s", 13]
+    ],
+    "newDealerHand": [
+        [4, "s", 4],
+        ["?", "?", 4]
+    ],
+    "blackjack": false,
+    "secure": "",
+    "split": "",
+    "double": null,
+    "chipStart": "3158",
+    "allowed": null,
+    "newkey": "a1486ec18f0380f1823be279b528d431",
+    "oldkey": "d8f4f86c50973c800ef05c1a880bb552",
+    "session": {
+        "rightBet": 10,
+        "leftBet": 0,
+        "secureBet": 0,
+        "rightHand": [
+            ["q", "s"],
+            [3, "s"]
+        ],
+        "leftHand": [],
+        "dealerHand": [
+            [4, "s"]
+        ],
+        "gameState": 10
+    },
+    "sessionstart": {
+        "rightBet": null,
+        "leftBet": null,
+        "secureBet": null,
+        "rightHand": null,
+        "leftHand": null,
+        "dealerHand": null,
+        "gameState": 1
+    }
+}
+
+action=stop
+
+{
+    "scoreright": 13,
+    "scoreleft": 0,
+    "scoredealer": 19,
+    "status": "ok",
+    "state": 1,
+    "winRight": {
+        "win": 0
+    },
+    "winLeft": {
+        "win": 0
+    },
+    "winSecure": {
+        "win": 0
+    },
+    "cards": [
+        [6, "d", 10],
+        [9, "d", 19]
+    ],
+    "check": {
+        "alert": "ok",
+        "winRight": "",
+        "winLeft": ""
+    },
+    "winState": 16650,
+    "gameResult": 3,
+    "newkey": "d8f4f86c50973c800ef05c1a880bb552",
+    "oldkey": "a1486ec18f0380f1823be279b528d431",
+    "session": {
+        "rightBet": null,
+        "leftBet": null,
+        "secureBet": null,
+        "rightHand": null,
+        "leftHand": null,
+        "dealerHand": null,
+        "gameState": 1
+    },
+    "sessionstart": {
+        "rightBet": 10,
+        "leftBet": 0,
+        "secureBet": 0,
+        "rightHand": [
+            ["q", "s"],
+            [3, "s"]
+        ],
+        "leftHand": [],
+        "dealerHand": [
+            [4, "s"]
+        ],
+        "gameState": 10
+    },
+    "allowed": null
+}
+
+action=split
+
+{
+    "status": "ok",
+    "state": 2186,
+    "right": [
+        ["a", "s", [4, 14]]
+    ],
+    "left": [
+        [10, "d", 13]
+    ],
+    "newkey": "b1f46961b73c78532d3954a20a4a01b5",
+    "oldkey": "b800bb3550bb5ab0baf1ea08700d399e",
+    "session": {
+        "rightBet": 10,
+        "leftBet": 10,
+        "secureBet": 0,
+        "rightHand": [
+            [3, "c"],
+            ["a", "s"]
+        ],
+        "leftHand": [
+            [3, "s"],
+            [10, "d"]
+        ],
+        "dealerHand": [
+            [5, "s"]
+        ],
+        "gameState": 2186
+    },
+    "sessionstart": {
+        "rightBet": 10,
+        "leftBet": 0,
+        "secureBet": 0,
+        "rightHand": [
+            [3, "c"],
+            [3, "s"]
+        ],
+        "leftHand": [],
+        "dealerHand": [
+            [5, "s"]
+        ],
+        "gameState": 10
+    },
+    "allowed": 65
+}

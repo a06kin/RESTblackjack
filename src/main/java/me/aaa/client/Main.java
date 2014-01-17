@@ -1,21 +1,26 @@
 package me.aaa.client;
 
+import me.aaa.server.Answer;
 import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Main {
 
@@ -44,15 +49,58 @@ public class Main {
 //
 //        Thread.sleep(2000);
 
+        JSONObject data;
+
         login("sensej_sanjok@inbox.lv","`1");
         Thread.sleep(2000);
         index();
         Thread.sleep(2000);
         blackJackIndex();
         Thread.sleep(2000);
-        newBet(Bet.TEN);
+        data = newBet(Bet.TEN);
+        for(int i = 0; i < 100; ++i){
+            Thread.sleep(2000);
+            String myHand = getMyHand(data);
+            String dealerHand = getDealerHand(data);
+            switch (Answer.getTurn(myHand, dealerHand)){
+                case "S": //STAND
+                    stand();
+                    break;
+                case "H": //HIT
+                    break;
+                case "D": //DOUBLE
+                    break;
+                case "P": //SPLIT
+                    break;
+                default:
+                    break;
+            }
+        }
         client.getConnectionManager().shutdown();
     }
+
+    private static String getDealerHand(JSONObject data) {
+        JSONArray dealerCard = (JSONArray)data.get("newDealerHand");
+        return null;
+    }
+
+    private static String getMyHand(JSONObject data) {
+        //data example - "newRightHand":[[5,"c",5],["j","c",15]]
+
+        JSONArray myCard = (JSONArray)data.get("newRightHand");
+
+        JSONArray myFirstCard = (JSONArray)myCard.get(0);
+        JSONArray mySecondCard = (JSONArray)myCard.get(1);
+
+        if (!"a".equalsIgnoreCase((String) myFirstCard.get(0)) && !"a".equalsIgnoreCase((String) mySecondCard.get(0)))
+            return (String)mySecondCard.get(2);
+        else
+            if ("a".equalsIgnoreCase((String) myFirstCard.get(0)))
+                return "A" + ((Integer)mySecondCard.get(2) - 10);
+            else return "A" + myFirstCard.get(0);
+
+    }
+
 
     private static void blackJackIndex() throws IOException {
         HttpGet getBlackJackIndex = new HttpGet("http://www.moswar.ru/casino/blackjack/");
@@ -77,10 +125,10 @@ public class Main {
 
     private static void login(String username, String password) throws IOException {
 
-        List<NameValuePair> indexFormParam = new ArrayList<NameValuePair>();
+        List<NameValuePair> indexFormParam = new ArrayList<>();
         indexFormParam.add(new BasicNameValuePair("action", "login"));
-        indexFormParam.add(new BasicNameValuePair("email", "sensej_sanjok@inbox.lv"));
-        indexFormParam.add(new BasicNameValuePair("password", "`1"));
+        indexFormParam.add(new BasicNameValuePair("email", username));
+        indexFormParam.add(new BasicNameValuePair("password", password));
         indexFormParam.add(new BasicNameValuePair("remember", "off"));
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(indexFormParam, Consts.UTF_8);
         HttpPost postIndex = new HttpPost("http://www.moswar.ru");
@@ -93,33 +141,73 @@ public class Main {
         postIndexResponse.close();
     }
 
-    //TODO:add json
-    private static void newBet(Bet betSize) throws IOException {
-        List<NameValuePair> betFormParam = new ArrayList<NameValuePair>();
-        betFormParam.add(new BasicNameValuePair("action", "new"));
-        betFormParam.add(new BasicNameValuePair("bet", betSize.value));
+    private static JSONObject newBet(Bet betSize) throws IOException {
 
-        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(betFormParam, Consts.UTF_8);
+        StringEntity entity = new StringEntity("action=new&bet=" + betSize.value);
+        entity.setContentType("application/x-www-form-urlencoded");
+
         HttpPost postBet = new HttpPost("http://www.moswar.ru/casino/blackjack/");
         postBet.setEntity(entity);
 
-        CloseableHttpResponse postBetResponse = client.execute(postBet);
+        return postData(postBet);
+    }
 
-        BufferedReader rd = new BufferedReader(new InputStreamReader(postBetResponse.getEntity().getContent()));
+    private static JSONObject stand() throws IOException {
 
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            JSONParser j = new JSONParser();
-            JSONObject o = (JSONObject)j.parse(line);
-            Map response = (Map)o.get("response");
+        StringEntity entity = new StringEntity("action=stop");
+        entity.setContentType("application/x-www-form-urlencoded");
 
-            System.out.println(response.get("somevalue"));
+        HttpPost postStand = new HttpPost("http://www.moswar.ru/casino/blackjack/");
+        postStand.setEntity(entity);
+
+        return postData(postStand);
+    }
+
+    private static JSONObject more() throws IOException {
+
+        StringEntity entity = new StringEntity("action=more");
+        entity.setContentType("application/x-www-form-urlencoded");
+
+        HttpPost postMore = new HttpPost("http://www.moswar.ru/casino/blackjack/");
+        postMore.setEntity(entity);
+
+        return postData(postMore);
+
+    }
+
+    private static JSONObject doubleBet() throws IOException {
+
+        StringEntity entity = new StringEntity("action=double");
+        entity.setContentType("application/x-www-form-urlencoded");
+
+        HttpPost postDouble = new HttpPost("http://www.moswar.ru/casino/blackjack/");
+        postDouble.setEntity(entity);
+
+        return postData(postDouble);
+    }
+
+    private static JSONObject postData(HttpPost post) throws IOException {
+        CloseableHttpResponse response = client.execute(post);
+
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+        String line;
+        JSONObject rez = null;
+        JSONParser parser = new JSONParser();
+        if((line = rd.readLine()) != null){
+            System.out.println(line);
+            try {
+                rez = (JSONObject)parser.parse(line);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        System.out.println(postBetResponse.toString());
+        System.out.println(response.toString());
 
-        postBetResponse.close();
+        response.close();
+
+        return rez;
 
     }
 }
