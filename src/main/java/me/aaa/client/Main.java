@@ -19,8 +19,7 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -35,6 +34,14 @@ public class Main {
 
         private Bet(String value) {
             this.value = value;
+        }
+
+        private static final List<Bet> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+        private static final int SIZE = VALUES.size();
+        private static final Random RANDOM = new Random();
+
+        public static Bet random()  {
+            return VALUES.get(RANDOM.nextInt(SIZE));
         }
     }
 
@@ -57,31 +64,48 @@ public class Main {
         Thread.sleep(2000);
         blackJackIndex();
         Thread.sleep(2000);
-        data = newBet(Bet.TEN);
+        data = newBet(Bet.random());
         for(int i = 0; i < 100; ++i){
             Thread.sleep(2000);
             String myHand = getMyHand(data);
             String dealerHand = getDealerHand(data);
             switch (Answer.getTurn(myHand, dealerHand)){
                 case "S": //STAND
-                    stand();
+                    endGame(stand());
+                    Thread.sleep(2000);
+                    data = newBet(Bet.random());
                     break;
                 case "H": //HIT
+                    data = more();
                     break;
                 case "D": //DOUBLE
+                    data = doubleBet();
                     break;
                 case "P": //SPLIT
+                    data = more();
                     break;
                 default:
                     break;
             }
         }
+
         client.getConnectionManager().shutdown();
     }
 
+    private static void endGame(JSONObject stand) {
+        //TODO: save result
+    }
+
     private static String getDealerHand(JSONObject data) {
+        //data example - "newDealerHand":[[9,"s",9],["?","?",9]]
+
         JSONArray dealerCard = (JSONArray)data.get("newDealerHand");
-        return null;
+
+        JSONArray dealerFirstCard = (JSONArray)dealerCard.get(0);
+
+        if ("a".equalsIgnoreCase((String) dealerFirstCard.get(0)))
+            return "A";
+        else return (String) dealerFirstCard.get(3);
     }
 
     private static String getMyHand(JSONObject data) {
