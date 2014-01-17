@@ -5,9 +5,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- * Created by aaa on 1/17/14.
- */
 public class TEST2 {
 
     public static void main(String[] args){
