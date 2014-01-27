@@ -65,31 +65,48 @@ public class Main {
         blackJackIndex();
         Thread.sleep(2000);
         data = newBet(Bet.random());
-        for(int i = 0; i < 100; ++i){
-            Thread.sleep(2000);
-            String myHand = getMyHand(data);
-            String dealerHand = getDealerHand(data);
-            switch (Answer.getTurn(myHand, dealerHand)){
-                case "S": //STAND
-                    endGame(stand());
-                    Thread.sleep(2000);
-                    data = newBet(Bet.random());
-                    break;
-                case "H": //HIT
-                    data = more();
-                    break;
-                case "D": //DOUBLE
-                    data = doubleBet();
-                    break;
-                case "P": //SPLIT
-                    data = more();
-                    break;
-                default:
-                    break;
-            }
+        Thread.sleep(2000);
+
+        String myHand = getMyHand(data);
+        String mySumm = getMySumm(data);
+        String dealerHand = getDealerHand(data);
+
+        all:
+        while(true){
+            if ("18".equals(mySumm) || "19".equals(mySumm) || "20".equals(mySumm) || "21".equals(mySumm))
+                endGame(stand());
+            else
+                switch (Answer.getTurn(myHand, dealerHand)){
+                    case "S": //STAND
+                        endGame(stand());
+                        Thread.sleep(2000);
+                        break all;
+//                        data = newBet(Bet.random());
+                    case "H": //HIT
+                        data = more();
+                        break;
+                    case "D": //DOUBLE
+                        data = doubleBet();
+                        break;
+                    case "P": //SPLIT
+                        data = more();
+                        break;
+                    default:
+                        break;
+                }
         }
 
         client.getConnectionManager().shutdown();
+    }
+
+    private static String getMySumm(JSONObject data) {
+        //data example - "newDealerHand":[[9,"s",9],["?","?",9]]
+
+        JSONArray dealerCard = (JSONArray)data.get("newDealerHand");
+
+        JSONArray dealerFirstCard = (JSONArray)dealerCard.get(1);
+
+        return (String) dealerFirstCard.get(3);
     }
 
     private static void endGame(JSONObject stand) {
