@@ -12,4 +12,5 @@ body, td, a, div, .p {
 
 textarea {
     resize: none;
+    margin: 5px;
 }
