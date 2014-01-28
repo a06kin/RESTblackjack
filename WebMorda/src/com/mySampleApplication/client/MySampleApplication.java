@@ -1,9 +1,9 @@
 package com.mySampleApplication.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
@@ -18,37 +18,67 @@ public class MySampleApplication implements EntryPoint {
     public void onModuleLoad() {
         final Button bRefreshAll = new Button("RefreshAll");
         final Button bNextStep = new Button("NextStep");
-        final TextArea tNow = new TextArea();
-        final TextArea tNextStep = new TextArea();
+        final TextBox tbStatus = new TextBox();
+        final TextArea taNow = new TextArea();
+        final TextArea taNextStep = new TextArea();
+        final CheckBox cbUpdate = new CheckBox();
+
+        final Timer tAutoUpdate = new Timer() {
+            @Override
+            public void run() {
+                tbStatus.setText(tbStatus.getText() + ".");
+            }
+        };
 
         bRefreshAll.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new bRefreshAllClick(tNow));
+                MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new bRefreshAllClick(taNow));
             }
         });
 
         bNextStep.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new bNextStepClick(tNextStep));
+                MySampleApplicationService.App.getInstance().getMessage("Hello, World!", new bNextStepClick(taNextStep));
+            }
+        });
+
+        cbUpdate.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+
+                if (cbUpdate.getValue())
+                    tAutoUpdate.scheduleRepeating(1000);
+                else tAutoUpdate.cancel();
+
             }
         });
 
         //TA now
-        tNow.setReadOnly(true);
-        tNow.setHeight("50%");
-        tNow.setWidth("30%");
+        taNow.setReadOnly(true);
+        taNow.setHeight("50%");
+        taNow.setWidth("30%");
 
         //TA nextstep
-        tNextStep.setReadOnly(true);
-        tNextStep.setHeight("50%");
-        tNextStep.setWidth("30%");
+        taNextStep.setReadOnly(true);
+        taNextStep.setHeight("50%");
+        taNextStep.setWidth("30%");
 
+        //TB status
+        tbStatus.setReadOnly(true);
+        tbStatus.setWidth("200px");
+        tbStatus.setText("");
+
+        //CB update
+        cbUpdate.setEnabled(true);
+        cbUpdate.setText("AutoUpdate");
+
+        RootPanel.get("config").add(cbUpdate);
+        RootPanel.get("status").add(tbStatus);
 
         RootPanel.get("buttons").add(bRefreshAll);
         RootPanel.get("buttons").add(bNextStep);
-        RootPanel.get("textareas").add(tNow);
-        RootPanel.get("textareas").add(tNextStep);
 
+        RootPanel.get("textareas").add(taNow);
+        RootPanel.get("textareas").add(taNextStep);
     }
 
     private static class bRefreshAllClick implements AsyncCallback<String> {
