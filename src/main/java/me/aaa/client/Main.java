@@ -64,53 +64,111 @@ public class Main {
         Thread.sleep(2000);
         blackJackIndex();
         Thread.sleep(2000);
-        data = newBet(Bet.random());
+        data = newBet(Bet.TEN);
         Thread.sleep(2000);
 
+        String mySumm = null;
         String myHand = getMyHand(data);
-        String mySumm = getMySumm(data);
+        if (!myHand.contains("A"))
+            mySumm = getMySumm(data);
         String dealerHand = getDealerHand(data);
 
+        int i = 0;
+
         all:
-        while(true){
-            if ("18".equals(mySumm) || "19".equals(mySumm) || "20".equals(mySumm) || "21".equals(mySumm))
+        while(++i < 10){
+            if (mySumm != null && Integer.parseInt(mySumm) > 17){
                 endGame(stand());
-            else
+                data = newBet(Bet.TEN);
+                myHand = getMyHand(data);
+                mySumm = null;
+                if (!myHand.contains("A"))
+                    mySumm = getMySumm(data);
+                dealerHand = getDealerHand(data);
+            }
+            else{
                 switch (Answer.getTurn(myHand, dealerHand)){
                     case "S": //STAND
                         endGame(stand());
                         Thread.sleep(2000);
-                        break all;
-//                        data = newBet(Bet.random());
+//                        break all;
+                        data = newBet(Bet.TEN);
+                        myHand = getMyHand(data);
+                        if (!myHand.contains("A"))
+                            mySumm = getMySumm(data);
+                        dealerHand = getDealerHand(data);
+                        break;
                     case "H": //HIT
                         data = more();
+                        mySumm = getMyNextSumm(data);
+                        myHand = mySumm;
                         break;
                     case "D": //DOUBLE
                         data = doubleBet();
+                        mySumm = getMyNextSumm(data);
+                        myHand = mySumm;
                         break;
                     case "P": //SPLIT
                         data = more();
+                        mySumm = getMyNextSumm(data);
+                        myHand = mySumm;
                         break;
                     default:
                         break;
                 }
+
+            }
         }
 
         client.getConnectionManager().shutdown();
     }
 
     private static String getMySumm(JSONObject data) {
-        //data example - "newDealerHand":[[9,"s",9],["?","?",9]]
+        //data example - "newRightHand":[[5,"c",5],["j","c",15]]
 
-        JSONArray dealerCard = (JSONArray)data.get("newDealerHand");
+        JSONArray dealerCard = (JSONArray)data.get("newRightHand");
 
         JSONArray dealerFirstCard = (JSONArray)dealerCard.get(1);
 
-        return (String) dealerFirstCard.get(3);
+        return dealerFirstCard.get(2).toString();
     }
+
+    private static String getMyNextSumm(JSONObject data) {
+        //data example - "card":[[5,"s",17]]
+
+        JSONArray myNewCard = (JSONArray)data.get("card");
+
+        JSONArray mySumm = (JSONArray)myNewCard.get(0);
+
+        return mySumm.get(2).toString();
+    }
+
+    private static String getMyNextHand(JSONObject data) {
+        //data example - "card":[[5,"s",17]]
+
+        JSONArray myNewCard = (JSONArray)data.get("card");
+
+        JSONArray mySumm = (JSONArray)myNewCard.get(0);
+
+        try
+        {
+            Integer test = Integer.parseInt(mySumm.get(0).toString());
+            //if j,q,k - return 10
+        }
+        catch(NumberFormatException nfe)
+        {
+            System.out.println("No num:" + mySumm.get(0).toString());
+            return "10";
+        }
+
+        return mySumm.get(0).toString();
+    }
+
+
 
     private static void endGame(JSONObject stand) {
         //TODO: save result
+        System.out.println(stand.toString());
     }
 
     private static String getDealerHand(JSONObject data) {
@@ -120,9 +178,9 @@ public class Main {
 
         JSONArray dealerFirstCard = (JSONArray)dealerCard.get(0);
 
-        if ("a".equalsIgnoreCase((String) dealerFirstCard.get(0)))
+        if ("a".equalsIgnoreCase(dealerFirstCard.get(0).toString()))
             return "A";
-        else return (String) dealerFirstCard.get(3);
+        else return dealerFirstCard.get(2).toString();
     }
 
     private static String getMyHand(JSONObject data) {
@@ -133,12 +191,12 @@ public class Main {
         JSONArray myFirstCard = (JSONArray)myCard.get(0);
         JSONArray mySecondCard = (JSONArray)myCard.get(1);
 
-        if (!"a".equalsIgnoreCase((String) myFirstCard.get(0)) && !"a".equalsIgnoreCase((String) mySecondCard.get(0)))
-            return (String)mySecondCard.get(2);
+        if (!"a".equalsIgnoreCase(myFirstCard.get(0).toString()) && !"a".equalsIgnoreCase(mySecondCard.get(0).toString()))
+            return mySecondCard.get(2).toString();
         else
-            if ("a".equalsIgnoreCase((String) myFirstCard.get(0)))
+            if ("a".equalsIgnoreCase(myFirstCard.get(0).toString()))
                 return "A" + ((Integer)mySecondCard.get(2) - 10);
-            else return "A" + myFirstCard.get(0);
+            else return "A" + myFirstCard.get(2);
 
     }
 

@@ -12,4 +12,8 @@
     <!-- Specify the app servlets.                   -->
     <servlet path='/MySampleApplicationService' class='com.mySampleApplication.server.MySampleApplicationServiceImpl'/>
 
+    <!-- logger -->
+
+    <inherits name="com.google.gwt.logging.Logging"/>
+
 </module>
