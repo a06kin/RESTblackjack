@@ -154,6 +154,12 @@ public class Answer {
     }};
 
     public static String getTurn(String player, String dealerUpcard){
-        return data.get(player+dealerUpcard);
+        String rez = data.get(player+dealerUpcard);
+        if (rez == null){
+            System.out.println("Player: " + player);
+            System.out.println("dealerUpcard: " + dealerUpcard);
+            return "S";
+        }
+        return rez;
     }
 }

@@ -16,14 +16,37 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
 
     private static CloseableHttpClient client = HttpClients.createDefault();
+    private static Random rand = new Random();
+
+    private static FileWriter fstream;
+    private static BufferedWriter out;
+
+    static {
+        try {
+            fstream = new FileWriter("log.txt", true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        out = new BufferedWriter(fstream);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        log("======================================================" +
+             dateFormat.format(date) +
+            "======================================================");
+
+
+    }
 
     private enum Bet {
         TEN("10"),
@@ -54,18 +77,18 @@ public class Main {
 //        System.out.println(indexResponse.getStatusLine());
 //        System.out.println(indexResponse.toString());
 //
-//        Thread.sleep(2000);
+//
 
         JSONObject data;
 
         login("sensej_sanjok@inbox.lv","`1");
-        Thread.sleep(2000);
+
         index();
-        Thread.sleep(2000);
+
         blackJackIndex();
-        Thread.sleep(2000);
-        data = newBet(Bet.TEN);
-        Thread.sleep(2000);
+
+        data = newBet(Bet.random());
+
 
         String mySumm = null;
         String myHand = getMyHand(data);
@@ -76,14 +99,14 @@ public class Main {
         int i = 0;
 
         all:
-        while(i < 10){
+        while(i < 100){
             //TODO if "check" right or left winner or looser - new game - alternative - check if > 21 then new game
             if (mySumm != null && Integer.parseInt(mySumm) > 17){
                 ++i;
-                if (Integer.parseInt(mySumm) < 21)
+                if (Integer.parseInt(mySumm) <= 21)
                     endGame(stand());
                 else System.out.println("Dealer WIN");
-                data = newBet(Bet.TEN);
+                data = newBet(Bet.random());
                 myHand = getMyHand(data);
                 mySumm = null;
                 if (!myHand.contains("A"))
@@ -95,9 +118,9 @@ public class Main {
                     case "S": //STAND
                         ++i;
                         endGame(stand());
-                        Thread.sleep(2000);
+
 //                        break all;
-                        data = newBet(Bet.TEN);
+                        data = newBet(Bet.random());
                         myHand = getMyHand(data);
                         mySumm = null;
                         if (!myHand.contains("A"))
@@ -134,6 +157,17 @@ public class Main {
         }
 
         client.getConnectionManager().shutdown();
+        out.close();
+    }
+
+    private static void log(String l){
+        try {
+            out.write(l);
+            out.newLine();
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static boolean checkWin(JSONObject data) {
@@ -165,11 +199,15 @@ public class Main {
 
     private static String getMyNextSumm(JSONObject data) {
         //data example - "card":[[5,"s",17]]
+        //"card":[[7,"d",[10,20]]
 
         JSONArray myNewCard = (JSONArray)data.get("card");
 
         JSONArray mySumm = (JSONArray)myNewCard.get(0);
 
+        if (mySumm.get(2) instanceof JSONArray){
+            return ((JSONArray)mySumm.get(2)).get(1).toString();
+        }
         return mySumm.get(2).toString();
     }
 
@@ -204,7 +242,7 @@ public class Main {
             System.out.println("YOU WIN");
         }
 
-        System.out.println(stand.toString());
+        log(stand.toString());
     }
 
     private static String getDealerHand(JSONObject data) {
@@ -221,6 +259,9 @@ public class Main {
 
     private static String getMyHand(JSONObject data) {
         //data example - "newRightHand":[[5,"c",5],["j","c",15]]
+        //["q","s",10],["a","d",21]
+
+        String rez = null;
 
         JSONArray myCard = (JSONArray)data.get("newRightHand");
 
@@ -228,14 +269,13 @@ public class Main {
         JSONArray mySecondCard = (JSONArray)myCard.get(1);
 
         if (!"a".equalsIgnoreCase(myFirstCard.get(0).toString()) && !"a".equalsIgnoreCase(mySecondCard.get(0).toString()))
-            return mySecondCard.get(2).toString();
+            rez =  mySecondCard.get(2).toString();
         else
-            if ("a".equalsIgnoreCase(myFirstCard.get(0).toString())){
+            if ("a".equalsIgnoreCase(myFirstCard.get(0).toString()))
+                rez =  "A" + filterCard(mySecondCard.get(0).toString());
+            else rez =  "A" + filterCard(myFirstCard.get(0).toString());
 
-                return "A" + filterCard(mySecondCard.get(0).toString());
-            }
-            else return "A" + filterCard(myFirstCard.get(0).toString());
-
+         return "A10".equals(rez) ? "20" : rez;
     }
 
 
@@ -244,7 +284,7 @@ public class Main {
 
         CloseableHttpResponse BlackJackIndexResponse = client.execute(getBlackJackIndex);
 
-        System.out.println(BlackJackIndexResponse.toString());
+        log(BlackJackIndexResponse.toString());
 
         BlackJackIndexResponse.close();
     }
@@ -254,7 +294,7 @@ public class Main {
 
         CloseableHttpResponse getPlayerResponse = client.execute(getPlayer);
 
-        System.out.println(getPlayerResponse.toString());
+        log(getPlayerResponse.toString());
 
         getPlayerResponse.close();
 
@@ -273,7 +313,7 @@ public class Main {
 
         CloseableHttpResponse postIndexResponse = client.execute(postIndex);
 
-        System.out.println(postIndexResponse.toString());
+        log(postIndexResponse.toString());
 
         postIndexResponse.close();
     }
@@ -324,6 +364,16 @@ public class Main {
     }
 
     private static JSONObject postData(HttpPost post) throws IOException {
+        try {
+            int r = 0;
+            while (r < 2000)
+                r = rand.nextInt(6000);
+            System.out.println("Sleep " + r + " msec");
+            Thread.sleep(r);
+        } catch (InterruptedException e) {
+            System.out.println("Thread.Sleep problem");
+            e.printStackTrace();
+        }
         CloseableHttpResponse response = client.execute(post);
 
         BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -332,7 +382,7 @@ public class Main {
         JSONObject rez = null;
         JSONParser parser = new JSONParser();
         if((line = rd.readLine()) != null){
-            System.out.println(line);
+            log(line);
             try {
                 rez = (JSONObject)parser.parse(line);
             } catch (ParseException e) {
@@ -340,7 +390,7 @@ public class Main {
             }
         }
 
-        System.out.println(response.toString());
+        log(response.toString());
 
         response.close();
 
