@@ -76,9 +76,13 @@ public class Main {
         int i = 0;
 
         all:
-        while(++i < 10){
+        while(i < 10){
+            //TODO if "check" right or left winner or looser - new game - alternative - check if > 21 then new game
             if (mySumm != null && Integer.parseInt(mySumm) > 17){
-                endGame(stand());
+                ++i;
+                if (Integer.parseInt(mySumm) < 21)
+                    endGame(stand());
+                else System.out.println("Dealer WIN");
                 data = newBet(Bet.TEN);
                 myHand = getMyHand(data);
                 mySumm = null;
@@ -89,11 +93,13 @@ public class Main {
             else{
                 switch (Answer.getTurn(myHand, dealerHand)){
                     case "S": //STAND
+                        ++i;
                         endGame(stand());
                         Thread.sleep(2000);
 //                        break all;
                         data = newBet(Bet.TEN);
                         myHand = getMyHand(data);
+                        mySumm = null;
                         if (!myHand.contains("A"))
                             mySumm = getMySumm(data);
                         dealerHand = getDealerHand(data);
@@ -104,9 +110,16 @@ public class Main {
                         myHand = mySumm;
                         break;
                     case "D": //DOUBLE
-                        data = doubleBet();
-                        mySumm = getMyNextSumm(data);
-                        myHand = mySumm;
+                        //TODO check if can double
+                        if (checkDouble(data)){
+                            data = doubleBet();
+                            mySumm = getMyNextSumm(data);
+                            myHand = mySumm;
+                        }else{
+                            data = more();
+                            mySumm = getMyNextSumm(data);
+                            myHand = mySumm;
+                        }
                         break;
                     case "P": //SPLIT
                         data = more();
@@ -121,6 +134,23 @@ public class Main {
         }
 
         client.getConnectionManager().shutdown();
+    }
+
+    private static boolean checkWin(JSONObject data) {
+        if (data.containsKey("check")) {
+            JSONObject check = (JSONObject)data.get("check");
+            if ("".equals(check.get("winLeft")) && "".equals(check.get("winRight")))
+                return true;
+            else return false;
+        } else return true;
+    }
+
+    private static boolean checkDouble(JSONObject data) {
+        if (data.containsKey("double")) {
+            String doubleS = (String) data.get("double");
+            if ("ok".equals(doubleS)) return true;
+        }
+        return false;
     }
 
     private static String getMySumm(JSONObject data) {
@@ -143,31 +173,37 @@ public class Main {
         return mySumm.get(2).toString();
     }
 
-    private static String getMyNextHand(JSONObject data) {
-        //data example - "card":[[5,"s",17]]
-
-        JSONArray myNewCard = (JSONArray)data.get("card");
-
-        JSONArray mySumm = (JSONArray)myNewCard.get(0);
+    private static String filterCard(String card) {
 
         try
         {
-            Integer test = Integer.parseInt(mySumm.get(0).toString());
+            Integer test = Integer.parseInt(card);
             //if j,q,k - return 10
         }
         catch(NumberFormatException nfe)
         {
-            System.out.println("No num:" + mySumm.get(0).toString());
+            System.out.println("No num:" + card);
             return "10";
         }
 
-        return mySumm.get(0).toString();
+        return card;
     }
 
 
 
     private static void endGame(JSONObject stand) {
         //TODO: save result
+
+        JSONObject winLeft = (JSONObject)stand.get("winLeft");
+
+        JSONObject winRight = (JSONObject)stand.get("winRight");
+
+        if ((Long)winLeft.get("win") == 0 && (Long)winRight.get("win") == 0){
+            System.out.println("Dealer WIN");
+        }else if ((Long)winRight.get("win") == 1){
+            System.out.println("YOU WIN");
+        }
+
         System.out.println(stand.toString());
     }
 
@@ -194,9 +230,11 @@ public class Main {
         if (!"a".equalsIgnoreCase(myFirstCard.get(0).toString()) && !"a".equalsIgnoreCase(mySecondCard.get(0).toString()))
             return mySecondCard.get(2).toString();
         else
-            if ("a".equalsIgnoreCase(myFirstCard.get(0).toString()))
-                return "A" + ((Integer)mySecondCard.get(2) - 10);
-            else return "A" + myFirstCard.get(2);
+            if ("a".equalsIgnoreCase(myFirstCard.get(0).toString())){
+
+                return "A" + filterCard(mySecondCard.get(0).toString());
+            }
+            else return "A" + filterCard(myFirstCard.get(0).toString());
 
     }
 
